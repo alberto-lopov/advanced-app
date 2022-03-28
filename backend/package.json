@@ -5,9 +5,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "initdb": "node ./scripts/fillMongoDB.js",
-    "start": "node app.js",
-    "dev": "nodemon app.js",
+    "initdb": "node ./src/scripts/fillMongoDB.js",
+    "start": "node ./src/app.js",
+    "dev": "nodemon ./src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

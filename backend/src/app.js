@@ -1,10 +1,10 @@
 import express from 'express';
-const app = express();
-const port = 300;
+import { pokemonRouter } from './routes/pokemons.js';
 
-app.get('/', (req, res) => {
-    res.json({user: "hola"});
-  })
+const app = express();
+const port = 4001;
+
+app.use('/pokemons', pokemonRouter);
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)

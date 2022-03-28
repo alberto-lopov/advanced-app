@@ -4,20 +4,15 @@ import fetch from "node-fetch";
 import lodash from "lodash";
 const {range} = lodash;
 
-const protocol = "mongodb://";
-const auth = "albertolp:albertolp@"
-const uri = "localhost:27017"
-const pathDB = "/pokemondb";
-const connectionOptions = "?authSource=admin"
-const url = protocol+auth+uri+pathDB+connectionOptions;
 
+import { urlDB } from "../globalVar.js";
 const numberPokemonsToFecth = 493 //Pokedex until 4th Gen
 
 //Execute program
 run();
 
 async function run(){
-    await mongoose.connect(url);
+    await mongoose.connect(urlDB);
 
     //Run logic
     await storePokemonUntil(numberPokemonsToFecth)

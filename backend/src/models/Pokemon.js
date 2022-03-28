@@ -474,4 +474,9 @@ const pokemonSchema = mongoose.Schema({
     }
   });
 
+//Allow search pokemons by a string
+pokemonSchema.statics.findByString = function(name){
+  return this.where({ name: new RegExp(name, 'i')})
+}
+
 export const Pokemon = mongoose.model("Pokemon", pokemonSchema);
