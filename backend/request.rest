@@ -1,0 +1,11 @@
+GET http://localhost:4001/login/sergio
+
+###
+//Request con token JSON user.name = alberto
+GET http://localhost:4001/pokemons/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiYWxiZXJ0byIsImlhdCI6MTY0ODQ2NDU3OX0.qoceHaWvl_JO6aTtRexfeMUR8_8Ma2GmZZYRQMO7uvs
+
+###
+//Request con token JSON user.name = sergio
+GET http://localhost:4001/pokemons/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoic2VyZ2lvIiwiaWF0IjoxNjQ4NDY0NzM1fQ.iJ67vh_Yon2-FqWPf3kXWFGhpYibjAN9Wmvy7TN_2aE

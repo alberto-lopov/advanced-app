@@ -1,9 +1,11 @@
 import express from "express";
 import { PokemonService } from "../PokemonService.js";
+import { authToken } from "./middleware.js";
+import { userAuthorized } from "../globalVar.js";
 
 export const pokemonRouter = express.Router();
 
-pokemonRouter.get("/:id", (req, res) => {
+pokemonRouter.get("/:id", authToken, (req, res) => {
     const launch = async () => {
         const foundPokemon = await PokemonService.getById(req.params.id);
         if(foundPokemon){
@@ -14,10 +16,13 @@ pokemonRouter.get("/:id", (req, res) => {
         }
     }
 
-    launch();
+    req.user.name === userAuthorized ? 
+        launch()
+        :
+        res.status(401).send('Error 401: Unauthorized Access not user ' + userAuthorized);
 });
 
-pokemonRouter.get("/", (req, res) => {
+pokemonRouter.get("/", authToken, (req, res) => {
     const launch = async () => {
         let name = "";
         if(req.query) name = req.query.name;
@@ -30,5 +35,8 @@ pokemonRouter.get("/", (req, res) => {
         }
     }
 
-    launch();
+    req.user.name === userAuthorized ? 
+        launch()
+        :
+        res.status(401).send('Error 401: Unauthorized Access not user ' + userAuthorized);
 });

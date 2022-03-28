@@ -1,3 +1,5 @@
+//Authorized username to fecth and display data about pokemon
+export const userAuthorized = "alberto";
 
 //Address to MongoDB
 const protocol = "mongodb://";
