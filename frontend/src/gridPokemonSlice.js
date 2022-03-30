@@ -7,6 +7,9 @@ const gridPokemonSlice = createSlice({
     reducers: {
         loadPokemons: (state, action) => {
             return action.payload;
+        },
+        clearPokemons: () => {
+            return null;
         }
     }
 });
@@ -17,7 +20,7 @@ export const selectAllPokemons = (state) => {
 }
 
 //Export actions
-export const {loadPokemons} = gridPokemonSlice.actions;
+export const {loadPokemons, clearPokemons} = gridPokemonSlice.actions;
 
 //Export reducer
 export default gridPokemonSlice.reducer;

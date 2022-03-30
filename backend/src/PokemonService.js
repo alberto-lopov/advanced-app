@@ -21,4 +21,16 @@ export class PokemonService {
         return foundsPokemon;
     }
 
+    static async getDefault(limit, offset=0){
+        //Check values
+        limit = limit <= 0 ? 1:limit;
+        offset = offset < 0 ? 0:offset;
+        
+        const db = await mongoose.connect(urlDB);
+        const foundsPokemon = await Pokemon.where("id").gt(offset).lte(limit);
+        db.disconnect(); 
+
+        return foundsPokemon;
+    }
+
 }

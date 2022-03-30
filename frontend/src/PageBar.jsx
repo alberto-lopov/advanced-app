@@ -4,6 +4,8 @@ import { range } from "lodash";
 
 import { nPokemonToFecth, pokemonPerPage} from "./globalVar";
 import "./pageBar.css"
+import { clearSearchText } from "./searchBarSlice";
+import { clearPokemons } from "./gridPokemonSlice";
 
 const lastIndex = Math.ceil(nPokemonToFecth/pokemonPerPage);
 const firstIndex = 1;
@@ -13,18 +15,26 @@ export const PageBar = () => {
     const pageIndex = useSelector(selectPageIndex);
 
     const handlerNextPage = () => {
+        dispatch(clearSearchText());
+        
         if(pageIndex !== lastIndex){
+            dispatch(clearPokemons());
             dispatch(nextPage());
         }
     };
 
     const handlerPreviousPage = () => {
+        dispatch(clearSearchText());
+
         if(pageIndex !== firstIndex){
+            dispatch(clearPokemons());
             dispatch(previousPage());
         }
     };
 
     const handlerSetPage = (event) => {
+        dispatch(clearSearchText());
+        
         let id = event.target.innerHTML;
         if(id === "First")
             id=firstIndex;
@@ -33,8 +43,10 @@ export const PageBar = () => {
         else
             id = parseInt(id, 10);
         
-        if(id !== pageIndex)
+        if(id !== pageIndex){
+            dispatch(clearPokemons());
             dispatch(setPage(id));
+        }
 
     };
 

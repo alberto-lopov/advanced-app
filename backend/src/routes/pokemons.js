@@ -1,4 +1,4 @@
-import express from "express";
+import express, { query } from "express";
 import { PokemonService } from "../PokemonService.js";
 import { authToken } from "./middleware.js";
 import { userAuthorized } from "../globalVar.js";
@@ -22,17 +22,23 @@ pokemonRouter.get("/:id", authToken, (req, res) => {
         res.status(401).send('Error 401: Unauthorized Access not user ' + userAuthorized);
 });
 
+//This route allows query usage, with parameters name, limit, offset
 pokemonRouter.get("/", authToken, (req, res) => {
     const launch = async () => {
-        let name = "";
-        if(req.query) name = req.query.name;
-        const foundPokemon = await PokemonService.getByString(name);
-        if(foundPokemon){
-            res.send(foundPokemon);
+        const {name, limit, offset} = req.query;
+        let foundPokemon = [];
+        if(name){
+            foundPokemon = await PokemonService.getByString(name);
         }
-        else{
-            res.status(404).send("Error 404: Not matches for that search term: " + name );
+        else if(limit){
+            foundPokemon = (offset ? await PokemonService.getDefault(limit,offset):await PokemonService.getDefault(limit));
         }
+        else
+            foundPokemon = await PokemonService.getByString(""); //Returns all pokemon in DB
+
+        
+        res.send(foundPokemon);
+        
     }
 
     req.user.name === userAuthorized ? 

@@ -1,4 +1,4 @@
-import { useEffect} from 'react';
+import { useEffect, useState} from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -12,7 +12,6 @@ import { loadPokemons, selectAllPokemons} from './gridPokemonSlice';
 import { selectPickedPokemon } from './infoPokemonSlice';
 import { selectPageIndex } from './pageBarSlice';
 import { selectFilteredPokemons } from './searchBarSlice';
-import { nPokemonToFecth, offsetPokemon } from './globalVar';
 import { selectTokenJWT } from './authSlice';
 
 
@@ -23,25 +22,28 @@ export const GridPokemon = () => {
     const filteredPokemon = useSelector(selectFilteredPokemons);
     const pageIndex = useSelector(selectPageIndex);
     const dispatch = useDispatch();
+    const [errorFetching, setErrorFetching] = useState(false);
 
     useEffect( () => {
         const fecthData = async () =>{
-            try{    
-                const apiUrl = `${urlServer}/pokemons`;
+            try{
+                const limit = pageIndex * pokemonPerPage;
+                const offset = pageIndex > 1 ? (pageIndex-1)*pokemonPerPage : 0;
+                const apiUrl = `${urlServer}/pokemons/?limit=${limit}&offset=${offset}`;
                 const response = await fetch(apiUrl, objFecth(tokenJTW));
                 const list = await response.json();
                 console.log(list);
                 dispatch(loadPokemons(list));
             }catch(err){
                 console.log("Error en Fecth GridPokemon: " + err);
+                setErrorFetching(true);
             }
         }   
     
         fecthData();
-    }, [dispatch, tokenJTW]);
+    }, [dispatch, tokenJTW, pageIndex]);
 
     if(listAllPokemon){
-        const listToShow = listAllPokemon.slice((pokemonPerPage*(pageIndex-1)), (pokemonPerPage*(pageIndex-1))+pokemonPerPage)
         return (
             <Container  className='gridPokemon'>
                 {pickedPokemon && <InfoPokemon/>}
@@ -51,7 +53,7 @@ export const GridPokemon = () => {
                         return <Col key={iPokemon.name} className='showPokemon' xs={6} md={3} xl={2}><DisplayPokemon pokemon={iPokemon}/></Col>
                     })
                     :
-                    listToShow.map((iPokemon) => { 
+                    listAllPokemon.map((iPokemon) => { 
                         return <Col key={iPokemon.name} className='showPokemon' xs={6} md={3} xl={2}><DisplayPokemon pokemon={iPokemon}/></Col>
                     })
                 }
@@ -62,7 +64,12 @@ export const GridPokemon = () => {
     
     return (
         <Container>
-            <Row><img src={loading} alt="Loading list pokemon" /></Row>
+        {errorFetching ?
+        <Row><p id="errMsgGrid">No info to display fetch error. It is posible that 
+        you don't have the priveleges too see the info. Try login as another user with priveleges</p></Row> 
+        : 
+        <Row><img src={loading} alt="Loading list pokemon" /></Row>
+        }
         </Container>
     );
 }

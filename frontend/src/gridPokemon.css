@@ -5,3 +5,9 @@
 .showPokemon{
     padding: 0px !important;
 }
+
+#errMsgGrid {
+    color: grey;
+    margin: 25% 0;
+    font-size: 30px;
+}
