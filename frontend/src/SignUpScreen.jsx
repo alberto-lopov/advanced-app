@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 
 import "./loginScreen.css"
 
-export const LoginScreen = () => {
+export const SignUpScreen = () => {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -19,18 +19,18 @@ export const LoginScreen = () => {
         try {
             //POST REQUEST of login
             console.log(loginRequest(username, pass));
-            const response = await fetch(`${urlServer}/login/`, loginRequest(username, pass));
+            const response = await fetch(`${urlServer}/login/new-user`, loginRequest(username, pass));
            
             //Error response
             if(response.status >= 400){
-               throw new Error("Error fetching => "+await response.text());
+                throw new Error("Error signing up => "+await response.text());
             }
             //Sucessful response
             //Dispatch tokenJWT
             const token = await response.json();
             dispatch(setTokenJWT(token));
             
-            //After succesfull login lets go to main view
+            //After succesfull sign-up lets go to main view
             navigate("/");
         } catch (err) {
             alert(err);
@@ -47,9 +47,9 @@ export const LoginScreen = () => {
             <input className="textInput form-control" type="password" placeholder="Password" defaultValue="" autoComplete="off"
                 {...register("passwordInput", {required:'Password is required.'})}/>
             <p className="error-text">{errors.passwordInput?.message}</p>
-            <button className="buttonInput btn btn-light" disabled={isSubmitting} type="submit">Log In</button>
+            <button className="buttonInput btn btn-light" disabled={isSubmitting} type="submit">Sign up</button>
         </form>
-        <Link className="btn btn-info" to="/sign-up">Sign up</Link>
+        <Link className="btn btn-info" to="/login">Log In</Link>
     </div>
   );
 }

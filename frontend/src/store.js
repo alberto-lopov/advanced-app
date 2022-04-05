@@ -14,11 +14,11 @@ const store = configureStore({
         allPokemons: gridPokemonReducer
     },
     //This allows to disable middleware used to check for errors.
-    //This middleware won't be in the final build
-    middleware: getDefaultMiddleware => getDefaultMiddleware({
+    //This middleware won't be in the final build, uncomment code below to see response times
+    /*middleware: getDefaultMiddleware => getDefaultMiddleware({
         immutableCheck: false,
         serializableCheck: false
-    })
+    })*/
 });
 
 export default store;

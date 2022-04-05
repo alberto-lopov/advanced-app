@@ -16,13 +16,17 @@ import { selectTokenJWT } from './authSlice';
 
 
 export const GridPokemon = () => {
+    //Selector and dispatch -> redux
     const tokenJTW = useSelector(selectTokenJWT);
     const pickedPokemon = useSelector(selectPickedPokemon);
     const listAllPokemon = useSelector(selectAllPokemons);
     const filteredPokemon = useSelector(selectFilteredPokemons);
     const pageIndex = useSelector(selectPageIndex);
     const dispatch = useDispatch();
+
+    //States
     const [errorFetching, setErrorFetching] = useState(false);
+    const [errorMsg, setErrorMsg] = useState(null);
 
     useEffect( () => {
         const fecthData = async () =>{
@@ -31,6 +35,10 @@ export const GridPokemon = () => {
                 const offset = pageIndex > 1 ? (pageIndex-1)*pokemonPerPage : 0;
                 const apiUrl = `${urlServer}/pokemons/?limit=${limit}&offset=${offset}`;
                 const response = await fetch(apiUrl, objFecth(tokenJTW));
+                if(response.status === 401){
+                    setErrorFetching(true);
+                    return setErrorMsg(await response.text());
+                }
                 const list = await response.json();
                 console.log(list);
                 dispatch(loadPokemons(list));
@@ -43,6 +51,7 @@ export const GridPokemon = () => {
         fecthData();
     }, [dispatch, tokenJTW, pageIndex]);
 
+    //Loaded list of pokemons for this page
     if(listAllPokemon){
         return (
             <Container  className='gridPokemon'>
@@ -62,14 +71,23 @@ export const GridPokemon = () => {
         );
     }
     
+    //In case of error
+    if(errorFetching)
+        return(
+        <Container>
+            {setErrorMsg ?
+            <Row><p id="errMsgGrid">You are not a registered user. {errorMsg}</p></Row> 
+            : 
+            <Row><p id="errMsgGrid">Error fetching. Request time out </p></Row>
+            }
+        </Container>
+
+        );
+    
+    //In process of loading a pokemon
     return (
         <Container>
-        {errorFetching ?
-        <Row><p id="errMsgGrid">No info to display fetch error. It is posible that 
-        you don't have the priveleges too see the info. Try login as another user with priveleges</p></Row> 
-        : 
-        <Row><img src={loading} alt="Loading list pokemon" /></Row>
-        }
+            <Row><img src={loading} alt="Loading list pokemon" /></Row>
         </Container>
     );
 }

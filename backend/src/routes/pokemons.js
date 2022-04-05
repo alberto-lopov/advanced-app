@@ -1,5 +1,5 @@
 import express, { query } from "express";
-import { PokemonService } from "../PokemonService.js";
+import { PokemonService } from "../servicesDB/PokemonService.js";
 import { authToken } from "./middleware.js";
 import { userAuthorized } from "../globalVar.js";
 
@@ -40,9 +40,6 @@ pokemonRouter.get("/", authToken, (req, res) => {
         res.send(foundPokemon);
         
     }
-
-    req.user.name === userAuthorized ? 
-        launch()
-        :
-        res.status(401).send('Error 401: Unauthorized Access not user ' + userAuthorized);
+    
+    launch();
 });

@@ -1,32 +1,20 @@
-import "./App.css";
-import { useSelector } from "react-redux";
-import { selectTokenJWT } from "./authSlice";
-
-import { GridPokemon } from './GridPokemon';
-import { PageBar } from "./PageBar";
-import { SearchBar } from "./SearchBar";
 import { LoginScreen } from "./LoginScreen";
+import { SignUpScreen } from "./SignUpScreen";
+import { MainView } from "./MainView";
+
+import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
+import React from "react";
 
 function App() {
-  const tokenJWT = useSelector(selectTokenJWT);
-
-  //Login before show info
-  if(!tokenJWT){
-    return(
-      <LoginScreen />
-    );
-  }
 
   return (
-      <div className="App">
-        <header className="App-header">
-          <SearchBar />
-          <PageBar />
-        </header>
-        <main className="App-main">
-          <GridPokemon/>
-        </main>
-      </div>
+    <Router>
+      <Routes>
+        <Route path="/" element = { <MainView />} />
+        <Route path="/sign-up" element = {<SignUpScreen />} />
+        <Route path="/login" element = {<LoginScreen />} />
+      </Routes>
+    </Router>
   );
 }
 

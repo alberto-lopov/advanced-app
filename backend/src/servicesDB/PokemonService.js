@@ -1,7 +1,7 @@
 // File to define a class to connect and get data from the Database
 import mongoose from "mongoose";
-import { urlDB } from "./globalVar.js";
-import { Pokemon } from "./models/Pokemon.js";
+import { urlDB } from "../globalVar.js";
+import { Pokemon } from "../models/Pokemon.js";
 
 export class PokemonService {
 
